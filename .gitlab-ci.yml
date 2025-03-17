@@ -1,0 +1,28 @@
+stages:
+  - build
+  - test
+
+build_job:
+  stage: build
+  script:
+    - echo "Building on commit: $CI_COMMIT_SHA"
+    - echo "Dummy build process..."
+    - mkdir build
+    - echo "Build successful!" > build/build_log.txt
+  artifacts:
+    paths:
+      - build/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+
+test_job:
+  stage: test
+  dependencies:
+    - build_job
+  script:
+    - echo "Testing on commit: $CI_COMMIT_SHA"
+    - echo "Running dummy tests..."
+    - cat build/build_log.txt
+    - echo "Tests passed!"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
